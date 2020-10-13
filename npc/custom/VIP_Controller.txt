@@ -1,0 +1,74 @@
+prontera,142,176,5	script	Premium Changer	660,{
+	mes "^0055FF[ Premium Exchanger ]^000000";
+	mes "Good day, I can make you a premium user.";
+	mes "For a premium ticket";
+	next;
+	mes "^0055FF[ Premium Exchanger ]^000000";
+	mes "A premium user will be able to use the premium buffs of the healer and other boosts";
+	mes "It includes +10 Food Buffs";
+	mes "and a boost of experience and drop rate by a certain percentage.";
+	next;
+	mes "^0055FF[ Premium Exchanger ]^000000";
+	mes "Do you want to be a premium user?";
+		switch(select("Yes!:No Im just looking around.")) {
+			Case 1:
+				goto Ontalk;
+				close;
+				
+			Case 2:
+				mes "^0055FF[ Premium Exchanger ]^000000";
+				mes "Okay, Have a nice day!";
+				close;
+				}
+		
+	OnTalk:
+	.@npc$ = "^0055FF[ Premium Exchanger ]^000000";
+		if ( groupid==6 || groupid==7 ) {
+			mes "+.@npc$+";
+			mes "You're already a [Premium User]";
+			next;
+			mes "+.@npc$+";
+			mes "Come back when your Premium already expired!";
+			close;
+	} else {
+			.@i = select(
+			.vip_day[0] + "Days",
+			.vip_day[1] + "Days",
+			.vip_day[2] + "Days" ) -1;
+			
+			mes "+.@npc$+";
+			mes "Your account will be premium for "+.vip_day[.@i]+" Days";
+			//mes "You will need a "+.vip_item[.@i]+" for that.";
+				switch(select("Yes i want to exchange my ticket:No Im just looking around.")) {
+					case 1:
+						if (countitem(.vip_item[.@i]) < 0){
+						mes "You don't have enough ticket";
+						end;
+						}else{
+							if (countitem(.vip_item[.@i]) > 0){
+							delitem .vip_item[.@i],1;
+							vip_time ( .vip_day[.@i] * 1440 );
+							mes "+.@npc$+";
+							mes "You are now a Premium User for "+.vip_day[.@i]+" Days!";
+								if(groupid==5){
+									setgroupid(6);
+									}else{
+									setgroupid(7)
+									}
+							end;
+							}
+						}
+					case 2:
+						mes "+.@npc$+";
+						mes "Okay, Have a nice day!";
+						close;
+						}
+					}
+		}
+		end;
+					
+		OnInit:
+		setarray .vip_day,7,14,31;
+		setarray .vip_item,32001,32002,32003; //Set The VIP Item here
+		end;
+		}

@@ -1,0 +1,75 @@
+prt_in,131,117,4	script	SUPER Gacha Machine	563,{
+
+	mes "[ ^FF7700Super Gacha Machine^000000 ]";
+	mes "I'll exchange cool";
+	mes "random prizes";
+	mes "with a 'HIGH' percentage";
+	mes "for every";
+	mes "^ff00005 SUPER! Gacha Coin^000000.";
+	next;
+	mes "[ ^FF7700Super Gacha Machine^000000 ]";
+	mes "Headgear prizes are:";
+	mes "^ff0000Chocolate Donut^000000";
+	mes "^ff0000Donut in Mouth^000000";
+	next;
+	mes "[ ^FF7700Super Gacha Machine^000000 ]";
+	mes "Grand Prize:";
+	mes "^ff0000Captain's Hat^000000";
+	mes "^ff0000Snake Head Hat^000000";
+	mes "^ff0000Angel Spirit^000000";
+	mes "^ff0000VIP 7 Days^000000";
+	mes "^ff0000DACRO Ring Box 7 Days^000000";
+	next;
+	mes "[ ^FF7700Super Gacha Machine^000000 ]";
+	mes "Consolation prizes are:";
+	mes "^ff0000TCG Card x5^000000";
+	mes "^ff0000Event Tickets x5^000000";
+	next;
+	if (countitem(32021) < 5) goto L_Sorry;
+	next;
+	if(select("Deal me in!:No way...")==2)
+		close;
+		mes "[ ^FF7700Super Gacha Machine^000000 ]";
+		mes "Here we go...";
+		delitem 32021,5;
+		set .@Total,14;	
+		setarray .@P1[0],5,5359,1; // Captain's Hat
+		setarray .@P2[0],5,32001,1; // vip 7
+		setarray .@P3[0],5,5389,1; // angel spirit
+		setarray .@P4[0],5,5388,1; // snake hat
+		setarray .@P5[0],15,5775,1; // Choco
+		setarray .@P6[0],15,5594,1; // Donut
+		setarray .@P7[0],15,31999,1; // dacro ring box
+		setarray .@P8[0],15,32000,1; // vip 1 day
+		setarray .@P9[0],20,14003,5; // esb
+		setarray .@P10[0],50,32020,1; // regular coin
+		setarray .@P11[0],50,12210,5; // BGUM
+		setarray .@P12[0],50,12208,5; // Battle Manual
+		setarray .@P13[0],100,7227,5; // TCG
+		setarray .@P14[0],100,7711,5; // Event Tix
+	do{
+		set .@i, rand(1,.@Total);
+	}while( rand(1,100) > getd(".@P"+.@i+"[0]") );
+	
+	for(set .@j,1; .@j<getarraysize(getd(".@P"+.@i)); set .@j,.@j+2)
+	{
+		getitem getd(".@P"+.@i+"["+.@j+"]"), getd(".@P"+.@i+"["+(.@j+1)+"]");
+		if (!.@k[0])
+		{
+			set .@gz,.@i;
+			setarray .@k[0], getd(".@P"+.@i+"["+.@j+"]"), getd(".@P"+.@i+"["+(.@j+1)+"]");
+			break;
+		}
+	}
+	if( .@gz && .@gz <= 10 )
+	announce "Congratulations! "+strcharinfo(0)+" just received "+getitemname(.@k[0])+" x "+.@k[1]+" from Gacha Machine",0;
+	specialeffect2 248;
+	close;
+L_Sorry:
+	mes "[ ^FF7700Super Gacha Machine^000000 ]";
+	mes "You don't have enough Gacha Coins, please get some";
+	end;
+OnInit:
+	waitingroom "SUPER Gacha Machine",0;
+	end;
+}

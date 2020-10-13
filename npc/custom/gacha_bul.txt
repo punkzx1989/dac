@@ -1,0 +1,5 @@
+prontera,165,171,3	script	gacha bulletin	858,{
+	OnInit:
+	waitingroom "GACHA ROOM",0;
+	end;
+}

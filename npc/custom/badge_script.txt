@@ -1,0 +1,103 @@
+//===== eAthena Script =======================================
+//= Badge System
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.0
+//===== Description: =========================================
+//= Allows players to change into any job after obtaining a "badge".
+//= Players receive badges after hitting the maximum job level for a class.
+//============================================================
+
+prontera,136,171,5	script	Badge Assistant	624,{
+
+	mes "[Badge Assistant]";
+	mes "Listed below are the badges in your inventory.  To change into a job, select it in the menu.";
+	mes " ";
+	mes "If none are listed or you do not want to change, press ^777777cancel^000000.";
+	next;
+	set .@menu$,"";
+	for( set .@i,3300; .@i <= 3319; set .@i,.@i+1 ) {
+		if (countitem(.@i) >= 1) set .@menu$, .@menu$ + getitemname(.@i);
+		set .@menu$, .@menu$ + ":"; }
+	set .@id,(select(.@menu$) + 3299);
+
+	mes "[Badge Assistant]";
+	mes "You have selected the following:";
+	mes "^F52887" + getitemname(.@id) + "^000000";
+	if (.@id == 3300) { mes "^B041FFYour base level will be reset to 1.  It cannot be undone.^000000"; }
+		else { mes " "; }
+	mes "Are you sure you want to change into this class?";
+	if(select("Yes!","No, I've changed my mind.")==1) { next; goto JobSelect; }
+	close;
+
+JobSelect:
+	switch(.@id){
+		case 3300: jobchange 0; set .@job, 10; break;
+		case 3301: jobchange 4008; set .@job,70; break;
+		case 3302: jobchange 4015; set .@job,70; break;
+		case 3303: jobchange 4010; set .@job,70; break;
+		case 3304: jobchange 4017; set .@job,70; break;
+		case 3305: jobchange 4012; set .@job,70; break;
+		case 3306: jobchange 4020; set .@job,70; break;
+		case 3307: jobchange 4021; set .@job,70; break;
+		case 3308: jobchange 4009; set .@job,70; break;
+		case 3309: jobchange 4016; set .@job,70; break;
+		case 3310: jobchange 4011; set .@job,70; break;
+		case 3311: jobchange 4019; set .@job,70; break;
+		case 3312: jobchange 4013; set .@job,70; break;
+		case 3313: jobchange 4018; set .@job,70; break;
+		case 3314: jobchange 23; set .@job,99; break;
+		case 3315: jobchange 24; set .@job,70; break;
+		case 3316: jobchange 25; set .@job,70; break;
+		case 3317: jobchange 4046; set .@job,50; break;
+		case 3318: jobchange 4047; set .@job,50; break;
+		case 3319: jobchange 4049; set .@job,50; break;
+		default:
+			mes "[Badge Assistant]";
+			mes "Something went wrong.  Try again.";
+			close;
+	}
+	if (.@id == 3300) { resetlvl(1); set StatusPoint, 100; }
+	set JobLevel, .@job;
+	atcommand "@allskill";
+	set SkillPoint,0;
+	mes "[Badge Assistant]";
+	mes "There you go!";
+	close;
+
+OnPCJobLvUpEvent:
+	if (Class == 0 && JobLevel == 10 && countitem(3300) == 0) { set .@id,3300; goto GetToken; }
+	if (JobLevel < 50) end;
+	if (Class == 23 && JobLevel == 99 && countitem(3314) == 0) { set .@id,3314; goto GetToken; }
+	if (Class == 4046 && JobLevel == 50 && countitem(3317) == 0) { set .@id,3317; goto GetToken; }
+	if (Class == 4047 && JobLevel == 50 && countitem(3318) == 0) { set .@id,3318; goto GetToken; }
+	if (Class == 4049 && JobLevel == 50 && countitem(3319) == 0) { set .@id,3319; goto GetToken; }
+	if (JobLevel != 70) end;
+	switch(Class){
+		case 4008: if (countitem(3301) == 0) { set .@id,3301; goto GetToken; } break;
+		case 4015: if (countitem(3302) == 0) { set .@id,3302; goto GetToken; } break;
+		case 4010: if (countitem(3303) == 0) { set .@id,3303; goto GetToken; } break;
+		case 4017: if (countitem(3304) == 0) { set .@id,3304; goto GetToken; } break;
+		case 4012: if (countitem(3305) == 0) { set .@id,3305; goto GetToken; } break;
+		case 4020: if (countitem(3306) == 0) { set .@id,3306; goto GetToken; } break;
+		case 4021: if (countitem(3307) == 0) { set .@id,3307; goto GetToken; } break;
+		case 4009: if (countitem(3308) == 0) { set .@id,3308; goto GetToken; } break;
+		case 4016: if (countitem(3309) == 0) { set .@id,3309; goto GetToken; } break;
+		case 4011: if (countitem(3310) == 0) { set .@id,3310; goto GetToken; } break;
+		case 4019: if (countitem(3311) == 0) { set .@id,3311; goto GetToken; } break;
+		case 4013: if (countitem(3312) == 0) { set .@id,3312; goto GetToken; } break;
+		case 4018: if (countitem(3313) == 0) { set .@id,3313; goto GetToken; } break;
+		case 24: if (countitem(3315) == 0) { set .@id,3315; goto GetToken; } break;
+		case 25: if (countitem(3316) == 0) { set .@id,3316; goto GetToken; } break;
+		default: break;
+	}
+	end;
+
+	GetToken:
+		atcommand "@allskill";
+		dispbottom "~ Congratulations!  You have now mastered your class. ~";
+		dispbottom "~ Use this " + getitemname(.@id) + " to change back to the job any time.~ ";
+		getitem .@id,1;
+		end;
+}

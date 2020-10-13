@@ -1,0 +1,84 @@
+// Basic Event Manager
+// By Mabuhay
+/*-=-=-=-=-=-=-=-=-=-=-=-=-=-
+ Currently added are the ff :
+ {#} NAME - "NPC_NAME" 
+ [1] Bombring - "Event_Bombring"
+ [2] Dice - "Event_Dice"
+ [3] Last Man Standing - "Event_LMS"
+ [4] Novice V Zombie - "Event_NvZ"
+ [5] Poring Catcher - "Poring_Catcher"
+ [6] Poring Hunter - "Poring_Hunter" (Added 12-15-2019)
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+// For easier management of Event NPCs
+/////////////////////////////////////
+//            NOTE:                //
+/////////////////////////////////////
+// I don't support any modifications unless I want to.
+// But if you want to change things especially the rewards,
+// Please refer to my F_Reward Functions
+// https://rathena.org/board/files/file/4068-itemvariablepoints-reward-function-for-beginners-or-lazy/
+// You should be able to easily change the rewards
+// If you have basic scripting knowledge
+prontera,164,174,4	script	Event Controller	933,{
+OnInit:
+	// 1 = item reward
+	// 2 = variable/cashpoints reward
+	// If you want to set item and variable/cashpoints rewards, do 1|2.
+	// If you only want 1, just choose between 1 or 2
+	$event_options = 1|2;
+	
+	// If item reward enabled
+	// What items will be rewarded
+	setarray $event_item_reward,
+		501, 10,
+		502, 5;
+		
+	// If variable reward.. set to your variable.
+	// If cashpoints.. set to #CASHPOINTS / #KAFRAPOINTS (Free Cash Points)
+	$event_var$ = "#EVENTVARIABLE";
+	
+	// Variable name?
+	// If cash points, set to Cash Points
+	// If your custom var, set to the name of that thing.
+	$event_var_name$ = "Custom Points";
+	
+	// How much points gain if #VAR / #CASHPOINTS / #KAFRAPOINTS?
+	$event_var_gain = 1;
+	
+	$event_item_arr = getarraysize($event_item_reward);
+	
+	// @eventstart for GM
+	bindatcmd "eventstart", strnpcinfo(0)+"::OnStart",60,60;
+	
+	// @eventjoin
+	bindatcmd "eventjoin", strnpcinfo(0)+"::OnJoinEvent";
+	end;
+
+// OnClock<hour><minute>: donpcevent "<npc_name>::OnStart";
+	OnClock0000: donpcevent "Event_Bombring::OnStart"; end; //----- 12 mn
+	OnClock0100: donpcevent "Event_Dice::OnStart"; end;
+	OnClock0200: donpcevent "Event_LMS::OnStart"; end;
+	OnClock0300: donpcevent "Poring_Catcher::OnStart"; end;
+	OnClock0400: donpcevent "Event_NvZ::OnStart"; end;
+	OnClock0500: donpcevent "Poring_Hunter::OnStart"; end;
+	OnClock0600: donpcevent "Event_Bombring::OnStart"; end; //----- 6 am
+	OnClock0700: donpcevent "Event_Dice::OnStart"; end;
+	OnClock0800: donpcevent "Event_LMS::OnStart"; end;
+	OnClock0900: donpcevent "Poring_Catcher::OnStart"; end;
+	OnClock1000: donpcevent "Event_NvZ::OnStart"; end;
+	OnClock1100: donpcevent "Poring_Hunter::OnStart"; end;
+	OnClock1200: donpcevent "Event_Bombring::OnStart"; end; //----- 12 nn
+	OnClock1300: donpcevent "Event_Dice::OnStart"; end;
+	OnClock1400: donpcevent "Event_LMS::OnStart"; end;
+	OnClock1500: donpcevent "Poring_Catcher::OnStart"; end;
+	OnClock1600: donpcevent "Event_NvZ::OnStart"; end;
+	OnClock1700: donpcevent "::OnStart"; end;
+	OnClock1800: donpcevent "Event_Bombring::OnStart"; end; //----- 6 pm
+	OnClock1900: donpcevent "Event_Dice::OnStart"; end;
+	OnClock2000: donpcevent "Event_LMS::OnStart"; end;
+	OnClock2100: donpcevent "Poring_Catcher::OnStart"; end;
+	OnClock2200: donpcevent "Event_NvZ::OnStart"; end;
+	OnClock2300: donpcevent "Poring_Hunter::OnStart"; end; //----- 11 pm
+	
+	}

@@ -1,0 +1,5 @@
+prontera,139,154,5	script	Quest Bulletin	858,{
+	OnInit:
+	waitingroom "QUEST ROOM",0;
+	end;
+}

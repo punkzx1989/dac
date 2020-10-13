@@ -1,0 +1,39 @@
+//===== rAthena Script =======================================
+//= Other Warp Script
+//===== By: ==================================================
+//= Athena (1.0)
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Warp Points for Other Maps
+//===== Additional Comments: =================================
+//= Split off npc_warp.txt
+//============================================================
+
+//guild_room,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs1,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs1,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs1,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs1,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs2,50,88,0	warp	warp4	0,0,hoge,0,0
+//guild_vs2,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs2,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs2,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs3,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs3,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs3,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs3,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs4,7,50,0	warp	warp4	0,0,hoge,0,0
+//guild_vs4,50,7,0	warp	warp4	0,0,hoge,0,0
+//guild_vs4,92,50,0	warp	warp4	0,0,hoge,0,0
+//guild_vs4,50,92,0	warp	warp4	0,0,hoge,0,0
+//guild_vs5,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs5,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs5,0,0,0	warp	warp4	0,0,hoge,0,0
+//guild_vs5,0,0,0	warp	warp4	0,0,hoge,0,0
+prt_in,128,104,0	warp	gacha	2,2,prontera,155,178
+prontera,165,168,0	warp	gacha1	2,2,prt_in,128,111
+prt_in,283,122,0	warp	quest	2,2,prontera,155,178
+prontera,139,151,0	warp	quest1	2,2,prt_in,283,127

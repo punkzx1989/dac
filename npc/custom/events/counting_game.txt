@@ -1,0 +1,155 @@
+
+
+prontera,156,243,5	script	Monster Counting Game	757,{
+	function xy_wall;
+	end;
+	
+	OnInit:
+		.skip_round_if_mob_dead = 1;
+		.max_round = 3;
+		.max_duration = 3;
+		.wall_mob_id = 1085;
+		setarray .xy_area, 
+			151, 232, 
+			161, 242;
+		setarray .monster, 
+			1002,		// Poring
+			1031,		// Poporing
+			1062,		// Santa Poring
+			// 1090,	// Mastering
+			// 1096,	// Angeling
+			1113,		// Drops
+			// 1120,	// Ghostring
+			1242,		// Marin
+			// 1388,	// Arc Angeling
+			// 1582,	// Deviling
+			1613, 		// Metaling
+			1784, 		// Stapo
+			1836; 		// Magmaring
+			
+		.monster_size = getarraysize(.monster);
+		.npc_name$ = strnpcinfo(0);
+		getmapxy(.map$, .npc_x, .npc_y, BL_NPC);
+		setmapflag .map$, mf_monster_noteleport;
+		end;
+		
+	OnMinute00:
+	OnStartEvent:
+		if (!.status) {
+			.status = 1;
+			do{
+				areawarp .map$, .xy_area[0], .xy_area[1], .xy_area[2], .xy_area[3], .map$, .npc_x, .npc_y;
+				setcell .map$, (.xy_area[0] - 1), (.xy_area[1] - 1), (.xy_area[2] + 1), (.xy_area[3] + 1), cell_basilica, 1;
+				setcell .map$, (.xy_area[0] - 1), (.xy_area[1] - 1), (.xy_area[2] + 1), (.xy_area[3] + 1), cell_shootable, 0;
+				setcell .map$, (.xy_area[0] - 1), (.xy_area[1] - 1), (.xy_area[2] + 1), (.xy_area[3] + 1), cell_landprotector, 1;
+				// setcell .map$, (.xy_area[0] - 1), (.xy_area[1] - 1), (.xy_area[2] + 1), (.xy_area[3] + 1), cell_walkable, 1;
+				
+				killmonster .map$, .npc_name$+"::OnDied";
+				killmonster .map$, .npc_name$+"::OnWallDied";
+				
+				for(.@i = .xy_area[0]; .@i <= .xy_area[2]; .@i++){
+					xy_wall(.@i, .xy_area[1]);
+					xy_wall(.@i, .xy_area[3]);
+				}
+				for(.@i = .xy_area[1]; .@i <= .xy_area[3]; .@i++){
+					xy_wall(.xy_area[0], .@i, 0);
+					xy_wall(.xy_area[2], .@i);
+				}
+			
+				.@round++;
+				npctalk "Round # "+.@round;
+				sleep 5000;
+				
+				.status = 2;
+				.current_mob = .monster[ rand(.monster_size) ];
+				.current_amount = rand(20, 50);
+				// add-on size influence ?
+				areamonster .map$, .xy_area[0], .xy_area[1], .xy_area[2], .xy_area[3], "", .current_mob, .current_amount, .npc_name$+"::OnDied";
+			
+				deletepset 1;
+				// defpattern 1, "([^:]+):.*"+.current_amount+".$", "OnRight";
+				defpattern 1,"([^:]+):.\\s*"+.current_amount+".*", "OnRight";
+				activatepset 1;
+				waitingroom "How many's there?", 0;
+				npctalk "Tell me the correct amount of monster in there.";
+				debugmes " > "+.current_amount+" "+getmonsterinfo(.current_mob, MOB_NAME);
+				
+				sleep (.max_duration * 60000);
+				
+				npctalk "Time's UP!";
+				killmonster .map$, .npc_name$+"::OnDied";
+				delwaitingroom;
+				deletepset 1;
+				.status = 1;
+				sleep 5000;
+				
+			}while(.@round < .max_round);
+			
+			npctalk "That's the Last, thank you for participating.";
+			emotion ET_THANKS;
+			
+			killmonster .map$, .npc_name$+"::OnDied";
+			killmonster .map$, .npc_name$+"::OnWallDied";
+			setcell .map$, (.xy_area[0] - 1), (.xy_area[1] - 1), (.xy_area[2] + 1), (.xy_area[3] + 1), cell_basilica, 0;
+			setcell .map$, (.xy_area[0] - 1), (.xy_area[1] - 1), (.xy_area[2] + 1), (.xy_area[3] + 1), cell_shootable, 1;
+			setcell .map$, (.xy_area[0] - 1), (.xy_area[1] - 1), (.xy_area[2] + 1), (.xy_area[3] + 1), cell_landprotector, 0;
+			setcell .map$, (.xy_area[0] - 1), (.xy_area[1] - 1), (.xy_area[2] + 1), (.xy_area[3] + 1), cell_walkable, 1;
+			.status = 0;
+			.current_mob = 0;
+			.current_amount = 0;
+		}
+		end;
+		
+		
+	OnDied:
+		if (.skip_round_if_mob_dead) {
+			npctalk "Warning, '"+strcharinfo(0)+"' trying to interupt the game by killing the monster. Hence round skipped.";
+			awake .npc_name$;
+		}
+		else {
+			npctalk "Warning, '"+strcharinfo(0)+"' trying to interupt the game by killing the monster. Stop it!";
+			areamonster .map$, .xy_area[0], .xy_area[1], .xy_area[2], .xy_area[3], "", .current_mob, 1, .npc_name$+"::OnDied";
+		}
+	OnWallDied:
+		end;
+
+	OnRight:
+		getmapxy(.@map$, .@x, .@y, BL_PC);
+		if (.status == 0) {
+			dispbottom "[Counting Game] Event isnt running.";
+		}
+		else if (.status == 1) {
+			dispbottom "[Counting Game] Please wait for the round to start.";
+		}
+		else if (distance(.npc_x, .npc_y, .@x, .@y) > 14) {
+			dispbottom "[Counting Game] You're too far away.";
+		}
+		else {
+			npctalk "Bravo!! "+strcharinfo(0)+" is correct!! There are "+.current_amount+" "+getmonsterinfo(.current_mob, MOB_NAME);
+			
+			// rewards
+			getitem 32020, 1;
+			//getitem 32020, 1;
+			//getitem 32020, 1;
+			
+			specialeffect2 EF_POTION_CON;
+			awake .npc_name$;
+		}
+		end;
+		
+	function	xy_wall	{
+		.@x = getarg(0); 
+		.@y = getarg(1);
+		monster .map$, .@x, .@y, "", .wall_mob_id, 1, .npc_name$+"::OnWallDied";
+		setcell .map$, .@x, .@y, .@x, .@y, cell_basilica, 1;
+		setcell .map$, .@x, .@y, .@x, .@y, cell_shootable, 0;
+		setcell .map$, .@x, .@y, .@x, .@y, cell_landprotector, 1;
+		setcell .map$, .@x, .@y, .@x, .@y, cell_walkable, 0;
+		return;
+	}
+}
+
+
+
+
+

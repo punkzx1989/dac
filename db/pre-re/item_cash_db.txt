@@ -1,0 +1,67 @@
+// Cash Shop Database
+// Contains the items sold in the ingame cash shop.
+//
+// Structure of Database:
+// Type,ItemID,Price
+//
+// Type:
+//    0: New
+//    1: Hot
+//    2: Limited
+//    3: Rental
+//    4: Gear
+//    5: Buff
+//    6: Heal
+//    7: Other
+//    8: Sale
+//
+// Price:
+//    Item cost, in cash points (#CASHPOINTS).
+//
+0,32001,100 //vip1
+0,32002,200 //vip2
+0,32003,300 //vip3
+0,16682,50 //halter
+0,12411,30 //he fm
+0,14592,10 // jobm
+0,12412,40 //he bbg
+0,12210,20 //bbg
+0,14003,5 //esb
+0,6293,5 //token of sieg
+0,13281,5 // aspd potion
+0,7040,1 //megaphone
+//
+2,32001,100 //vip1
+2,32002,200 //vip2
+2,32003,300 //vip3
+2,16682,50 //halter
+2,32021,10 //super gacha
+2,14003,5 //esb
+2,6293,5 //token of sieg
+2,13281,5 //aspd potion
+2,7040,1 //megaphone
+//
+
+//1,18600,1000 //cat ears beret
+//1,5360,1000 //wickenbine cat ears
+//1,5359,400
+1,5388,500 //snake hat
+//1,5766,400 //amistr
+//1,5289,400 //vanilmirth
+//1,5405,400 //filir
+//1,5253,400 //lif
+//1,5254,400
+1,5770,300 //splash hat
+1,5211,500 //dress hat
+1,5372,500 //koneko hat
+1,5444,400
+1,5776,400 //blazing sun
+//1,5325,300
+1,5389,400 //angel spirit
+1,5421,300
+1,5775,300
+1,5594,300
+1,5305,400 //pirate dagger
+1,5377,700
+1,2270,300 // romantic leaf
+1,2269,300 // romantic flower
